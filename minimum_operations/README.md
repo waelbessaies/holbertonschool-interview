@@ -24,4 +24,3 @@ carrie@ubuntu:~/0x03-minoperations$ ./0-main.py
 Min number of operations to reach 4 characters: 4
 Min number of operations to reach 9 characters: 6
 Min number of operations to reach 12 characters: 7
-carrie@ubuntu:~/0x03-minoperations$
