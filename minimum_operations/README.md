@@ -18,7 +18,7 @@ print("Min # of operations to reach {} char: {}".format(n, minOperations(n)))
 n = 12
 print("Min # of operations to reach {} char: {}".format(n, minOperations(n)))
 
-## Output
+# Output
 
 carrie@ubuntu:~/0x03-minoperations$ ./0-main.py
 Min number of operations to reach 4 characters: 4
