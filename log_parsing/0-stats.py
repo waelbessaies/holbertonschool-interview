@@ -1,37 +1,43 @@
 #!/usr/bin/python3
+"""Write a script that reads stdin line by line and computes metrics:"""
 
 import sys
 
+STATUS_CODES = {'200': 0,
+                '301': 0, '400': 0,
+                '401': 0, '403': 0,
+                '404': 0, '405': 0,
+                '500': 0}
 
-def print_metrics(metrics, file_size):
-    codes = [200, 301, 400, 401, 403, 404, 405, 500]
-    print("Total file size: {}" .format(file_size))
-    for code in range(len(codes)):
-        if status_codes[codes[code]] > 0:
-            print("{}: {}".format(codes[code], status_codes[codes[code]]))
+total_size = 0
+number_of_lines = 0
 
 
-
-file_size = 0
-line_count = 0
-status_codes = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
-
+def print_status_code(total_size):
+    print("File size: {:d}".format(total_size))
+    for key, value in sorted(STATUS_CODES.items()):
+        if value != 0:
+            print("{}: {:d}".format(key, value))
 
 
 try:
-    for line in sys.stdin:
-        try:
-            line_count += 1
-            arguments = line.split
-            file_size = int(arguments[-1])
-            http_code = int(arguments[-2])
-            status_codes[http_code] += 1
-            if line_count == 10:
-                print_metrics(status_codes, file_size)
-                line_count = 0
-        except Exception:
-            continue
-except Exception:
+    for arg in sys.stdin:
+        values = arg.split(" ")
+        if len(values) > 2:
+            status_code = values[-2]
+            file_size = values[-1]
+
+            if status_code in STATUS_CODES:
+                STATUS_CODES[status_code] += 1
+
+            total_size += int(file_size)
+            number_of_lines += 1
+
+            if number_of_lines == 10:
+                print_status_code(total_size)
+                number_of_lines = 0
+
+except KeyboardInterrupt:
     pass
 finally:
-    print_metrics(status_codes, file_size)
+    print_status_code(total_size)
