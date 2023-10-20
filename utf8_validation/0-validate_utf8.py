@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 def validUTF8(data):
     """Initialize a variable to keep track of the number"""
     continuation_bytes = 0
