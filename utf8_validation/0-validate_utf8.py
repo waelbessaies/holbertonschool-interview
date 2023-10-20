@@ -1,24 +1,28 @@
 #!/usr/bin/python3
-""" module cmnt """
+"""
+This module contains a function to validate UTF-8 encoding in alist ofintegers
+"""
 
 
 def validUTF8(data):
-    """ Validates UTF-8 encoding of the input data. """
+    number_of_bytes = 0
+    mask1 = 1 << 7
+    mask2 = 1 << 6
 
-    count = 0
-    for c in data:
-        if (count == 0):
-            if ((c >> 5) == 0b110):
-                count = 1
-            elif ((c >> 4) == 0b1110):
-                count = 2
-            elif ((c >> 3) == 0b11110):
-                count = 3
-            elif ((c >> 7)):
+    for number in data:
+        mask = mask1
+        if number_of_bytes == 0:
+            while mask & number:
+                number_of_bytes += 1
+                mask >>= 1
+
+            if number_of_bytes == 0:
+                continue
+
+            if number_of_bytes == 1 or number_of_bytes > 4:
                 return False
         else:
-            if ((c >> 6) != 0b10):
+            if not (number & mask1 and not (number & mask2)):
                 return False
-            count -= 1
-
-    return count == 0
+        number_of_bytes -= 1
+    return number_of_bytes == 0
