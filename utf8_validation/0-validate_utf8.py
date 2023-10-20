@@ -1,4 +1,9 @@
 #!/usr/bin/python3
+"""
+This module contains a function to validate UTF-8 encoding in a list of integers.
+"""
+
+
 def validUTF8(data):
     """Initialize a variable to keep track of the number"""
     continuation_bytes = 0
