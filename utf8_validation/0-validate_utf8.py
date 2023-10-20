@@ -1,34 +1,24 @@
 #!/usr/bin/python3
-"""
-This module contains a function to validate UTF-8 encoding in alist ofintegers
-"""
+""" module cmnt """
 
 
 def validUTF8(data):
-    """Initialize a variable to keep track of the number"""
-    continuation_bytes = 0
+    """ Validates UTF-8 encoding of the input data. """
 
-    for byte in data:
-        """Convert the byte to its binary representation with 8 bits"""
-        byte_str = format(byte, '08b')
-
-        if continuation_bytes > 0:
-            """ If a byte is a continuation bytedecrement the expected count"""
-            if not byte_str.startswith('10'):
+    count = 0
+    for c in data:
+        if (count == 0):
+            if ((c >> 5) == 0b110):
+                count = 1
+            elif ((c >> 4) == 0b1110):
+                count = 2
+            elif ((c >> 3) == 0b11110):
+                count = 3
+            elif ((c >> 7)):
                 return False
-            continuation_bytes -= 1
         else:
-            """Check the first few bits of the byte to determine the length"""
-            if byte_str.startswith('0'):
-                continue
-            elif byte_str.startswith('110'):
-                continuation_bytes = 1
-            elif byte_str.startswith('1110'):
-                continuation_bytes = 2
-            elif byte_str.startswith('11110'):
-                continuation_bytes = 3
-            else:
+            if ((c >> 6) != 0b10):
                 return False
+            count -= 1
 
-    """ All continuation bytes matched, return True"""
-    return continuation_bytes == 0
+    return count == 0
