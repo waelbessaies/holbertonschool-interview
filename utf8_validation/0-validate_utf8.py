@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-This module contains a function to validate UTF-8 encoding in a list of integers.
+This module contains a function to validate UTF-8 encoding in alist ofintegers
 """
 
 
