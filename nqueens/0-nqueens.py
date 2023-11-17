@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import sys
 
 def is_valid(board, row, col):
@@ -8,35 +9,30 @@ def is_valid(board, row, col):
             return False
     return True
 
-def print_solution(board):
-    for row in board:
-        line = ""
-        for col in range(len(board)):
-            if col == row:
-                line += "Q "
-            else:
-                line += ". "
-        print(line)
-    print()
-
 def solve_nqueens(N):
     if N < 4:
         print("N must be at least 4")
         sys.exit(1)
 
     board = [-1] * N
-    solve_util(board, 0)
+    solutions = []
+    solve_util(board, 0, solutions)
+    for sol in solutions:
+        print(sol)
 
-def solve_util(board, row):
+def solve_util(board, row, solutions):
     N = len(board)
     if row == N:
-        print_solution(board)
+        sol = []
+        for i in range(N):
+            sol.append([i, board[i]])
+        solutions.append(sol)
         return
 
     for col in range(N):
         if is_valid(board, row, col):
             board[row] = col
-            solve_util(board, row + 1)
+            solve_util(board, row + 1, solutions)
             board[row] = -1
 
 if __name__ == "__main__":
