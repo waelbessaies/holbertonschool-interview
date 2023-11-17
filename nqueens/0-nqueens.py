@@ -41,7 +41,7 @@ def solve_util(board, row, solutions):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python nqueens.py N")
+        print("Usage: nqueens N")
         sys.exit(1)
 
     try:
