@@ -25,19 +25,15 @@ function getMovieCharacters(movieId) {
     });
 }
 
-if (process.argv.length !== 3) {
-  console.log('Usage: node script_name.js <Movie_ID>');
-  process.exit(1);
+function printCharacterNames(movieId) {
+  getMovieCharacters(movieId)
+    .then(characters => {
+      if (characters) {
+        characters.forEach(character => {
+          console.log(character);
+        });
+      } else {
+        console.log('Error fetching characters. Please check the Movie ID.');
+      }
+    });
 }
-
-const movieId = process.argv[2];
-getMovieCharacters(movieId)
-  .then(characters => {
-    if (characters) {
-      characters.forEach(character => {
-        console.log(character);
-      });
-    } else {
-      console.log('Error fetching characters. Please check the Movie ID.');
-    }
-  });
