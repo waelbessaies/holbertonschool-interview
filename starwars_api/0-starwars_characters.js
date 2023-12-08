@@ -3,12 +3,12 @@ const axios = require('axios');
 
 function getMovieCharacters(movieId) {
   const url = `https://swapi.dev/api/films/${movieId}/`;
-  
+
   return axios.get(url)
     .then(response => {
       const charactersUrls = response.data.characters;
       const promises = charactersUrls.map(charUrl => axios.get(charUrl));
-      
+
       return Promise.all(promises)
         .then(charactersData => {
           const charactersNames = charactersData.map(charData => charData.data.name);
