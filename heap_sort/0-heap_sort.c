@@ -3,6 +3,10 @@
 
 /**
  * iParent - returns index of parent node for an array arranged as a binary
+ * tree, for index i
+ *
+ * @i: starting index to determine parent node index
+ * Return: index of parent node
  */
 int iParent(int i)
 {
@@ -12,6 +16,10 @@ int iParent(int i)
 
 /**
  * iLeftChild- returns index of left child branch for an array arranged as
+ * a binary tree, for index i
+ *
+ * @i: starting index to determine left child branch index
+ * Return: index of left child node
  */
 int iLeftChild(int i)
 {
@@ -21,6 +29,9 @@ int iLeftChild(int i)
 
 /**
  * ConvertToHeap - arranges array of integers into a heap/binary tree scheme
+ *
+ * @array: array of integers
+ * @size: number of elements in array
  */
 void ConvertToHeap(int *array, size_t size)
 {
@@ -38,6 +49,12 @@ void ConvertToHeap(int *array, size_t size)
 
 /**
  * SiftDown - shuffles heap/binary tree sorted array into array sorted by
+ * ascending value
+ *
+ * @array: array of values to be sorted in place, from heap to ascending
+ * @size: number of elements in array
+ * @start: starting index
+ * @end: ending index
  */
 void SiftDown(int *array, size_t size, int start, int end)
 {
@@ -70,6 +87,10 @@ void SiftDown(int *array, size_t size, int start, int end)
 
 /**
  * heap_sort - sorts array of integers in ascending order using a heap sort
+ * sift-down alogrithm
+ *
+ * @array: array of values to be sorted
+ * @size: number of elements in array
  */
 void heap_sort(int *array, size_t size)
 {
