@@ -1,102 +1,92 @@
-#include "main.h"
-
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
 /**
- * checknumber - Verify that a string is numeric
- * @string: A string
- * Return: 1 if valid, 0 if invalid
+ * _isnumber - checks if string is number
+ *
+ * @s: string
+ *
+ * Return: 1 if number, 0 if not
  */
-int checknumber(char *string)
+int _isnumber(char *s)
 {
-	int i;
-	char c;
+	int i, check, d;
 
-	for (i = 0; string[i]; i++)
+	d = 0, check = 1;
+	for (i = 0; *(s + i) != 0; i++)
 	{
-		c = string[i];
-		if (c < '0' || c > '9')
-			return (0);
+		d = isdigit(*(s + i));
+		if (d == 0)
+		{
+			check = 0;
+			break;
+		}
 	}
-
-	return (1);
+	return (check);
 }
 
 /**
- * print_string - Prints a string
+ * _callocX - reserves memory initialized to 0
  *
- * @string: A string
+ * @nmemb: # of bytes
+ *
+ * Return: pointer
  */
-void print_string(char *string)
+char *_callocX(unsigned int nmemb)
 {
-	int i;
+	unsigned int i;
+	char *p;
 
-	for (i = 0; string[i]; i++)
-		_putchar(string[i]);
-	_putchar('\n');
+	p = malloc(nmemb + 1);
+	if (p == 0)
+		return (0);
+	for (i = 0; i < nmemb; i++)
+		p[i] = '0';
+	p[i] = '\0';
+	return (p);
 }
 
 /**
- * _strlen - Calculates the length of a string
+ * main - multiplies inf numbers
  *
- * @str: A string
- *
- * Return: The number of bytes in the string excluding the null byte
- */
-size_t _strlen(char *str)
-{
-	size_t i = 0;
-
-	while (str[i++])
-		continue;
-
-	return (--i);
-}
-
-/**
- * main - multiply two large integers and prints the result
- * @argc: Command line argument count
- * @argv: Command line arguments
- * Return: 1 on success, 98 on failure.
+ * @argc: # of cmd line args
+ * @argv: cmd line args
+ * Return: No return
  */
 int main(int argc, char **argv)
 {
-	char *a, *b, digit_a, digit_b, sum;
-	char *result;
-	int i = 0, j;
-	size_t result_length, a_length, b_length, k;
+	int i, j, l1, l2, lful, mul, add, ten, ten2, tl, zer = 0;
+	char *res;
 
-	if (argc != 3 || !checknumber(argv[1]) || !checknumber(argv[2]))
+	if (argc != 3 || _isnumber(argv[1]) == 0 || _isnumber(argv[2]) == 0)
+		printf("Error\n"), exit(98);
+	if (atoi(argv[1]) == 0 || atoi(argv[2]) == 0)
+		printf("0\n"), exit(0);
+	l1 = strlen(argv[1]), l2 = strlen(argv[2]);
+	lful = l1 + l2;
+	res = _callocX(lful);
+	if (res == 0)
+		printf("Error\n"), exit(98);
+	for (i = l2 - 1; i >= 0; i--)
 	{
-		print_string("Error");
-		exit(98);
-	}
-	a = argv[1];
-	b = argv[2];
-	a_length = _strlen(a);
-	b_length = _strlen(b);
-	result_length = a_length + b_length;
-	result = (char *)malloc(result_length);
-	while ((size_t)i < result_length)
-		result[i++] = 0;
-	for (i = a_length - 1; i >= 0; i--)
-	{
-		digit_a = a[i] - '0';
-		for (j = b_length - 1; j >= 0; j--)
+		ten = 0, ten2 = 0;
+		for (j = l1 - 1; j >= 0; j--)
 		{
-			digit_b = b[j] - '0';
-			k = result_length - 1 - (b_length - j - 1) - (a_length - i - 1);
-			result[k] += digit_a * digit_b;
-			for (sum = result[k]; sum > 9; sum = result[k])
-			{
-				result[k--] = sum % 10;
-				result[k] += sum / 10;
-			}
+			tl = i + j + 1;
+			mul = (argv[1][j] - '0') * (argv[2][i] - '0') + ten;
+			ten = mul / 10;
+			add = (res[tl] - '0') + (mul % 10) + ten2;
+			ten2 = add / 10;
+			res[tl] = (add % 10) + '0';
 		}
+		res[tl - 1] = (ten + ten2) + '0';
 	}
-	for (i = k; (size_t)i < result_length; i++)
-		result[i] += '0';
-	while (result[k] == '0' && k < result_length - 1)
-		k++;
-	print_string(result + k);
-	free(result);
-	return (EXIT_SUCCESS);
+	if (res[0] == '0')
+		zer = 1;
+	for (; zer < lful; zer++)
+		printf("%c", res[zer]);
+	printf("\n");
+	free(res);
+	return (0);
 }
