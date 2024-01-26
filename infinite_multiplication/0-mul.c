@@ -1,105 +1,102 @@
-#include "holberton.h"
+#include "main.h"
 
 /**
- * _puts - prints a string.
- * @s: a string.
- * Return: Nothing.
+ * checknumber - Verify that a string is numeric
+ * @string: A string
+ * Return: 1 if valid, 0 if invalid
  */
-void _puts(char *s)
+int checknumber(char *string)
 {
-  if (*s != '\0')
-  {
-    _putchar(*s);
-    puts(s + 1);
-  }
+	int i;
+	char c;
+
+	for (i = 0; string[i]; i++)
+	{
+		c = string[i];
+		if (c < '0' || c > '9')
+			return (0);
+	}
+
+	return (1);
 }
+
 /**
- * err_message - print s and exit 98 status
- * @s: error message to print
- * Return: Nothing
+ * print_string - Prints a string
+ *
+ * @string: A string
  */
-void err_message(char *s)
+void print_string(char *string)
 {
-  _puts(s);
-  exit(98);
+	int i;
+
+	for (i = 0; string[i]; i++)
+		_putchar(string[i]);
+	_putchar('\n');
 }
-/**
- * _isdigit - check if s is a number or not.
- * @s: string to check.
- * Return: 0 if s is a number otherwise 1.
- */
-int _isdigit(char *s)
-{
-  int i, digit = 0;
 
-  for (i = 0; s[i] && !digit; i++)
-  {
-    if (s[i] < '0' || s[i] > '9')
-      digit++;
-  }
-  return (digit);
+/**
+ * _strlen - Calculates the length of a string
+ *
+ * @str: A string
+ *
+ * Return: The number of bytes in the string excluding the null byte
+ */
+size_t _strlen(char *str)
+{
+	size_t i = 0;
+
+	while (str[i++])
+		continue;
+
+	return (--i);
 }
+
 /**
- * operations - multiplies, adds and stores the result in a string.
- * @num1: first number.
- * @num2: second number.
- * @len1: length of num1.
- * @len2: length of num2.
- * Return: result of multiplies.
+ * main - multiply two large integers and prints the result
+ * @argc: Command line argument count
+ * @argv: Command line arguments
+ * Return: 1 on success, 98 on failure.
  */
-char *operations(char *num1, char *num2, int len1, int len2)
+int main(int argc, char **argv)
 {
-  char *result = NULL;
-  int i, j, carry, len_total = (len1 + len2);
+	char *a, *b, digit_a, digit_b, sum;
+	char *result;
+	int i = 0, j;
+	size_t result_length, a_length, b_length, k;
 
-  result = malloc(sizeof(char) * len_total);
-  if (!result)
-    err_message("Error");
-  for (i = 0; i < len_total; i++)
-    result[i] = '0';
-  for (i = len1 - 1; i >= 0; i--)
-  {
-    carry = 0;
-    for (j = len2 - 1; j >= 0; j--)
-    {
-      carry += (num1[i] - '0') * (num2[j] - '0');
-      carry += result[i + j + 1] - '0';
-      result[i + j + 1] = (carry % 10) + '0';
-      carry /= 10;
-    }
-    if (carry)
-      result[i + j + 1] = (carry % 10) + '0';
-  }
-  return (result);
-}
-/**
- * main - multiplies two positive numbers.
- * description: Usage: mul num1 num2
- * Print the result, followed by a new line.
- * @av: arguments value (num1, num2)
- * @ac: arguments count
- * Return: 0 if success otherwise 98 and print Error.
- */
-int main(int ac, char **av)
-{
-  int len1 = 0, len2 = 0;
-  char *num1 = av[1], *num2 = av[2], *result = NULL;
-
-  if (ac != 3 || _isdigit(num1) || _isdigit(num2))
-    err_message("Error");
-  if (av[1][0] == 48 || av[2][0] == 48)
-    _puts("0"), exit(0);
-
-  while (num1[len1])
-    len1++;
-  while (num2[len2])
-    len2++;
-
-  result = operations(num1, num2, len1, len2);
-  if (result[0] == '0')
-    _puts(result + 1);
-  else
-    _puts(result);
-  free(result);
-  return (0);
+	if (argc != 3 || !checknumber(argv[1]) || !checknumber(argv[2]))
+	{
+		print_string("Error");
+		exit(98);
+	}
+	a = argv[1];
+	b = argv[2];
+	a_length = _strlen(a);
+	b_length = _strlen(b);
+	result_length = a_length + b_length;
+	result = (char *)malloc(result_length);
+	while ((size_t)i < result_length)
+		result[i++] = 0;
+	for (i = a_length - 1; i >= 0; i--)
+	{
+		digit_a = a[i] - '0';
+		for (j = b_length - 1; j >= 0; j--)
+		{
+			digit_b = b[j] - '0';
+			k = result_length - 1 - (b_length - j - 1) - (a_length - i - 1);
+			result[k] += digit_a * digit_b;
+			for (sum = result[k]; sum > 9; sum = result[k])
+			{
+				result[k--] = sum % 10;
+				result[k] += sum / 10;
+			}
+		}
+	}
+	for (i = k; (size_t)i < result_length; i++)
+		result[i] += '0';
+	while (result[k] == '0' && k < result_length - 1)
+		k++;
+	print_string(result + k);
+	free(result);
+	return (EXIT_SUCCESS);
 }
